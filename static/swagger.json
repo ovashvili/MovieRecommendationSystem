@@ -1,0 +1,166 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "The API helps users to find recommended movies for themselves",
+    "version": "1.0.0",
+    "title": "Movie Recommendation API",
+    "license": {
+      "name": "IBSU @ 2023",
+      "url": "https://ibsu.edu.ge/"
+    }
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Movie Recommendation",
+      "description": "The Endpoints to manage the movie recommendations"
+    }
+  ],
+  "paths": {
+    "/movies/list": {
+      "get": {
+        "tags": [
+          "Movie Recommendation"
+        ],
+        "summary": "Get movies list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "greaterOrEq",
+            "description": "Rating - greater or equal",
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "in": "query",
+            "name": "lessOrEq",
+            "description": "Rating - less or equal to",
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Limit of the list",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/MoviesFilterResponse"
+            }
+          },
+          "400": {
+            "description": "Failed. Bad request data."
+          }
+        }
+      }
+    },
+    "/movies/info/{title}": {
+      "get": {
+        "tags": [
+          "Movie Recommendation"
+        ],
+        "summary": "Get info about the movie",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "title",
+            "required": true,
+            "description": "Movie title",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Failed. Misunderstood Request."
+          },
+          "404": {
+            "description": "Failed. Movie not found."
+          }
+        }
+      }
+    },
+    "/movies/recommendation/{title}": {
+      "get": {
+        "tags": [
+          "Movie Recommendation"
+        ],
+        "summary": "Get recommended movies",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "title",
+            "required": true,
+            "description": "Movie title",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Recommended movies limit",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/MoviesResponse"
+            }
+          },
+          "400": {
+            "description": "Failed. Misunderstood Request."
+          },
+          "404": {
+            "description": "Failed. Movie not found."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MoviesResponse": {
+        "type": "array",
+        "properties": {
+          "Movies": {
+            "type": "string"
+          }
+        }
+      },
+      "MoviesFilterResponse": {
+        "type": "array",
+        "properties": {
+          "original_title": {
+            "type": "string"
+          },
+          "vote_average": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
+}
